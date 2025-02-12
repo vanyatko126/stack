@@ -1,5 +1,6 @@
 #ifndef MEM_WORK
 #define MEM_WORK
+
 #include "types.h"
 
 void                stack_ctor(stack* values, int capasity);

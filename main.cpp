@@ -8,12 +8,12 @@
 
 int main(int argc, char* argv[])
 {
-    if(argc < 2)
-        return EXIT_FAILURE; //dopisat
+    char* name_file = check_args(argc, argv);
     stack_value deleted_number = 0;
     stack stk = {};
     stack_ctor(&stk, 10);
-    push(&stk, 52);
+    push(&stk, 53);
+    pop(&stk, &deleted_number);
     dump(&stk);
     stack_dtor(&stk);
     return 0;

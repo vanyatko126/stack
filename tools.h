@@ -8,4 +8,4 @@ void                dump(stack* values);
 int                 compare(long long int num1, long long int num2);
 char* check_args(int argc, char* argv[]);
 
-#endif // TOOLS
+#endif

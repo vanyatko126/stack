@@ -6,9 +6,6 @@
 
 #include "types.h"
 
-static const int divide_of_four = 4;
-static const int double_change = 2;
-
 void pointer_to_data_canary(stack* values)
 {
     *(canary_type*)values->data = CANARY_VALUE;
@@ -30,11 +27,12 @@ void stack_ctor(stack* values, int capasity)
                                             COUNT_OF_CANARY  * sizeof(canary_type)); 
     assert(values->data != NULL);
     pointer_to_data_canary(values);
+    return;
 }
 
 void stack_realloc(stack* values)   
 {   
-    if(values->size > values->capacity / divide_of_four && values->size < values->capacity)
+    if(values->size > values->capacity / 4 && values->size < values->capacity)
         return;
 
     values->data = (stack_value*)((char*)values->data + values->capacity * sizeof(stack_value));
@@ -42,10 +40,10 @@ void stack_realloc(stack* values)
     values->data = (stack_value*)((char*)values->data - values->capacity * sizeof(stack_value) - sizeof(canary_type));
 
     if (values->size >= values->capacity)
-        values->capacity *= double_change;
+        values->capacity *= 2;
 
-    if(values->size <= values->capacity / divide_of_four)
-        values->capacity /= double_change;
+    if(values->size <= values->capacity / 4)
+        values->capacity /= 2;
         
     stack_value* data_check = (stack_value*)realloc(values->data, values->capacity * sizeof(stack_value)
                                                                    + COUNT_OF_CANARY * sizeof(canary_type));
@@ -54,14 +52,17 @@ void stack_realloc(stack* values)
     values->data = (stack_value*)((char*)values->data + values->capacity * sizeof(stack_value) + sizeof(canary_type));
     *(canary_type*)values->data = CANARY_VALUE;
     values->data = (stack_value*)((char*)values->data - values->capacity * sizeof(stack_value));
+
+    return;
 }
 void stack_dtor(stack* values)
 {
-    values->data = NULL;
+    free(values->data);
     values->size = 0;
     values->capacity     = 0;
     values->hash_struct  = 0;
-    values->hash_stack   = 0;//memset!
+    values->hash_stack   = 0;
     values->left_canary  = 0;
     values->right_canary = 0;
+    return;
 }
