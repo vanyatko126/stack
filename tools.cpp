@@ -54,13 +54,4 @@ int compare(long long int num1, long long int num2)
     return fabs(num1 - num2) <= 0.0001;
 }
 
-char* check_args(int argc, char* argv[])
-{
-    if(argc != 2) {
-        printf(".\\stack.exe <name_file>\n");
-        exit(1);
-    }
-
-    return argv[1];
-}
     

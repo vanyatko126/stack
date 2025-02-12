@@ -11,17 +11,8 @@
 static const unsigned long long meow_1 = 52525252;
 static const unsigned long long meow_2 = 25252525;
 
-unsigned long long djb2_hash(stack* values, size_t size) 
-{
-    unsigned long long* bytes = (unsigned long long*) values;
-    unsigned long long hash = 5381;
-    size = sizeof(stack) - 2 * sizeof(hash_type);
-    for (size_t i = 0; i < size; i++) {
-        hash = ((hash << 5) + hash) + bytes[i]; // hash * 33 + bytes[i]
-    }
-    return hash;
-}
-unsigned long long djb2_hash(stack* values, size_t size) 
+
+unsigned long long djb2_hash(stack* values, size_t size) //TODO общий хэш и ассерт
 {
     unsigned long long* bytes = (unsigned long long*) values;
     unsigned long long hash = 5381;

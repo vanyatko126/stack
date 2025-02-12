@@ -13,12 +13,12 @@ typedef long long int       canary_type;
 typedef unsigned long long  hash_type;
 
 typedef struct {
-    canary_type left_canary;
-    stack_value* data;
+    
     int capacity;
     int size;
+    canary_type left_canary;
     canary_type right_canary;
-
+    stack_value* data;
     hash_type hash_stack;
     hash_type hash_struct;
 } stack;
