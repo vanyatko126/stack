@@ -31,35 +31,22 @@ void pop(stack* values, stack_value* deleted_number)
     errors err = errors_check(values);
     if(err != NO_ERROR)
         exit_assert(values, err);
-    return;
 }
 
 void dump(stack* values)
 {
     for(int i = 0; i < values->size; i++)
-        printf("%lf ", values->data[i]);
-    putchar('\n');
-    printf("Left struct_canary  = %lld\n", values->left_canary);
-    printf("Right struct_canary = %lld\n", values->right_canary);
-    printf("Left data_canary = %lld\n", *(canary_type*)((char*)values->data - sizeof(canary_type)));
-    printf("Right data_canary = %lld\n", *(canary_type*)((char*)values->data + values->capacity * sizeof(stack_value)));
-    printf("Size of stack = %d\n", values->size);
-    printf("Capacity of stack = %d\n", values->capacity);
-    return;
+        fprintf(stderr, "%lf ", values->data[i]);
+    fputc('\n', stderr);
+    fprintf(stderr, "Left struct_canary  = %lld\n", values->left_canary);
+    fprintf(stderr, "Right struct_canary = %lld\n", values->right_canary);
+    fprintf(stderr, "Left data_canary = %lld\n", *(canary_type*)((char*)values->data - sizeof(canary_type)));
+    fprintf(stderr, "Right data_canary = %lld\n", *(canary_type*)((char*)values->data + values->capacity * sizeof(stack_value)));
+    fprintf(stderr, "Size of stack = %d\n", values->size);
+    fprintf(stderr, "Capacity of stack = %d\n", values->capacity);
 }
-
 
 int compare(long long int num1, long long int num2)
 {
     return fabs(num1 - num2) <= 0.0001;
-}
-
-char* check_args(int argc, char* argv[])
-{
-    if(argc != 2) {
-        printf(".\\stack.exe <name_file>\n");
-        exit(1);
-    }
-
-    return argv[1];
 }

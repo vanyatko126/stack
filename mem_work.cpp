@@ -3,8 +3,12 @@
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <memory.h>
 
 #include "types.h"
+
+const int double_change = 2;
+const int quadro_change = 4;
 
 void pointer_to_data_canary(stack* values)
 {
@@ -27,12 +31,11 @@ void stack_ctor(stack* values, int capasity)
                                             COUNT_OF_CANARY  * sizeof(canary_type)); 
     assert(values->data != NULL);
     pointer_to_data_canary(values);
-    return;
 }
 
 void stack_realloc(stack* values)   
 {   
-    if(values->size > values->capacity / 4 && values->size < values->capacity)
+    if(values->size > values->capacity / quadro_change && values->size < values->capacity)
         return;
 
     values->data = (stack_value*)((char*)values->data + values->capacity * sizeof(stack_value));
@@ -40,10 +43,10 @@ void stack_realloc(stack* values)
     values->data = (stack_value*)((char*)values->data - values->capacity * sizeof(stack_value) - sizeof(canary_type));
 
     if (values->size >= values->capacity)
-        values->capacity *= 2;
+        values->capacity *= double_change;
 
-    if(values->size <= values->capacity / 4)
-        values->capacity /= 2;
+    if(values->size <= values->capacity / quadro_change)
+        values->capacity /= double_change;
         
     stack_value* data_check = (stack_value*)realloc(values->data, values->capacity * sizeof(stack_value)
                                                                    + COUNT_OF_CANARY * sizeof(canary_type));
@@ -52,17 +55,10 @@ void stack_realloc(stack* values)
     values->data = (stack_value*)((char*)values->data + values->capacity * sizeof(stack_value) + sizeof(canary_type));
     *(canary_type*)values->data = CANARY_VALUE;
     values->data = (stack_value*)((char*)values->data - values->capacity * sizeof(stack_value));
-
-    return;
 }
+
 void stack_dtor(stack* values)
 {
-    free(values->data);
-    values->size = 0;
-    values->capacity     = 0;
-    values->hash_struct  = 0;
-    values->hash_stack   = 0;
-    values->left_canary  = 0;
-    values->right_canary = 0;
-    return;
+    values->data = NULL;
+    memset(values, 0, 7 * sizeof(stack));
 }

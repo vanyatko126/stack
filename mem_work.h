@@ -9,3 +9,4 @@ void                stack_dtor(stack* values);
 void                pointer_to_data_canary(stack* values);
 
 #endif
+//MEM_WORK
