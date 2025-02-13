@@ -13,8 +13,8 @@ void push(stack* values, stack_value push_number)
     values->data[values->size] = push_number;
     values->size++;
     stack_realloc(values);
-    values->hash_struct = djb2_hash(values, values->size);  
-
+    values->hash_struct = djb2_hash(values, SIZE_OF_MEM);  
+    
     errors err = errors_check(values);
     if(err != NO_ERROR)
         exit_assert(values, err);
@@ -26,7 +26,7 @@ void pop(stack* values, stack_value* deleted_number)
     values->data[values->size] = POIZON; 
     values->size--;
     stack_realloc(values);
-    values->hash_struct = djb2_hash(values, values->size);
+    values->hash_struct = djb2_hash(values, SIZE_OF_MEM);
 
     errors err = errors_check(values);
     if(err != NO_ERROR)
