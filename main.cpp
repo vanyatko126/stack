@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     stack_value deleted_number = 0;
     stack stk = {};
-    stack_ctor(&stk, 10);
+    stack_ctor(&stk, 10);;
     push(&stk, 53);
     push(&stk, 53);
     push(&stk, 53);

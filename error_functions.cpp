@@ -11,12 +11,23 @@
 static const unsigned long long meow_1 = 52525252;
 static const unsigned long long meow_2 = 25252525;
 
-unsigned long long djb2_hash(stack* values, size_t size) 
+unsigned long long djb2_hash_struct(stack* values, size_t size) 
 {
-    unsigned long long* bytes = (unsigned long long*) values;
+    char* bytes = (char*)(values);
     unsigned long long hash = meow_1;
-    for (size_t i = 0; i < size; i++) {
-        hash = ((hash << 5) + hash) + bytes[i]; // hash * 33 + bytes[i]
+    for (size_t i = 0; i < size; i++) 
+    {
+        hash = ((hash << 5) + hash) + bytes[i]; 
+    }
+    return hash;
+}
+unsigned long long djb2_hash_data(stack_value* values, size_t size)
+{
+    unsigned long long* bytes = (unsigned long long*)values;
+    unsigned long long hash = meow_2;
+    for (size_t i = 0; i < size; i++)
+    {
+        hash = ((hash << 5) + hash) + bytes[i]; 
     }
     return hash;
 }
@@ -42,9 +53,10 @@ errors errors_check(stack* values)
     
     if(values->size < 0)
         return DATA_ERROR;
-
-    if(compare(values->hash_struct, djb2_hash(values, SIZE_OF_MEM)))
+    if(compare(values->hash_struct, djb2_hash_struct(values, SIZE_OF_MEM)) == 0)
         return HASH_STRUCT_ERROR;
+    if(compare(values->hash_data, djb2_hash_data(values->data, values->size)) == 0)
+        return HASH_DATA_ERROR;
     return NO_ERROR;
 }
 void exit_assert(stack* values, errors error)
@@ -58,8 +70,11 @@ void exit_assert(stack* values, errors error)
         fprintf(stderr, "Your data is broken\n");
         break;
     case HASH_STRUCT_ERROR:
-        fprintf(stderr, "Your hash is incorrect\n");
+        fprintf(stderr, "Your hash of struct is incorrect\n");
         break;    
+    case HASH_DATA_ERROR:
+        fprintf(stderr, "Your hash of data is incorrect\n");
+        break;
     case DATA_ERROR:
         fprintf(stderr, "You popped too much times\n");
         break;
